@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/checklist')
+mongoose.connect("mongodb://localhost:27017/checklist", { useNewUrlParser: true })
     .then(() => console.log('Connected to MongoDb'))
     .catch(err => console.error('Connection failed', err))
 
 userSchema = new mongoose.Schema({
     user: String,
-    lastyDay: String,
-    days:  [
+    lastDay: String,
+    days:[
         {
             day: String,
             actions: [{
@@ -21,8 +21,8 @@ const Checklist = mongoose.model('Checklist', userSchema)
 
 async function saveUser(){
     const user = new Checklist({
-        user: "marco_bz"
-        lastDay : "02.01.2018",
+        user: "marco_bz",
+        lastDay : "02-01-2018",
         days:[
             {           
                 day: "01.01.2018" ,
@@ -53,7 +53,7 @@ async function saveUser(){
                     action: "action3",
                     isDone: true
                 }]
-            },
+            }
         ]
     })
 
