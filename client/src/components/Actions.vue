@@ -1,0 +1,35 @@
+<template>
+  <div>
+    
+  </div>
+</template>
+
+<script>
+import userService from '../../services/userService'
+export default {
+  name: 'actions',
+  data () {
+    return {
+    }
+  },
+  methods: {
+  }
+}
+</script>
+
+<style scoped>
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>
