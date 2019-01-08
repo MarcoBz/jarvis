@@ -30,7 +30,6 @@ export default {
       let response
       try{
         response = await userService.fetchDailyChecklist(this.user, this.lastday)
-        console.log(response)
       }
       catch (err){
         response = err.response
@@ -45,7 +44,6 @@ export default {
                             "value" : lastDailyChecklist
                         }
             const addRequest = await userService.addDailyChecklist(this.user, requestData)
-            console.log(addRequest)
             router.go('/');
         }
       }
