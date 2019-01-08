@@ -2,19 +2,7 @@ const express = require('express')
 const router = express.Router()
 const database = require('../../database')
 
-router.get('/:id/checklist', (req, res) => {
-    const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-    if (!findUser) return res.status(404).send({ 
-        "message" : "The user does not exist",
-        "content" : false
-    }); 
-    else res.status(200).send({ 
-        "message" : "The user exists",
-        "content" : findUser
-    }) ;  
-});
-
-router.get('/:id/checklist/lastDay', (req, res) => {
+router.get('/:id/lastDay', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -26,7 +14,7 @@ router.get('/:id/checklist/lastDay', (req, res) => {
     })   
 });
 
-router.get('/:id/checklist/actions', (req, res) => {
+router.get('/:id/actions', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -38,7 +26,7 @@ router.get('/:id/checklist/actions', (req, res) => {
     })   
 });
 
-router.get('/:id/checklist/actions/:action', (req, res) => {
+router.get('/:id/actions/:action', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -56,7 +44,7 @@ router.get('/:id/checklist/actions/:action', (req, res) => {
     })   
 });
 
-router.patch('/:id/checklist/actions/', (req, res) => {
+router.patch('/:id/actions/', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -85,7 +73,7 @@ router.patch('/:id/checklist/actions/', (req, res) => {
     });
 });
 
-router.get('/:id/checklist/dailyRecap', (req, res) => {
+router.get('/:id/dailyRecap', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -97,7 +85,7 @@ router.get('/:id/checklist/dailyRecap', (req, res) => {
     });   
 });
 
-router.get('/:id/checklist/dailyRecap/:day', (req, res) => {
+router.get('/:id/dailyRecap/:day', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -116,7 +104,7 @@ router.get('/:id/checklist/dailyRecap/:day', (req, res) => {
     })
 });
 
-router.patch('/:id/checklist/dailyRecap', (req, res) => {
+router.patch('/:id/dailyRecap', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -146,7 +134,7 @@ router.patch('/:id/checklist/dailyRecap', (req, res) => {
     });
 });
 
-router.get('/:id/checklist/dailyStatus', (req, res) => {
+router.get('/:id/dailyStatus', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -158,7 +146,7 @@ router.get('/:id/checklist/dailyStatus', (req, res) => {
     }); 
 });
 
-router.get('/:id/checklist/dailyStatus/:status', (req, res) => {
+router.get('/:id/dailyStatus/:status', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -176,7 +164,7 @@ router.get('/:id/checklist/dailyStatus/:status', (req, res) => {
     }) 
 });
 
-router.patch('/:id/checklist/dailyStatus', (req, res) => {
+router.patch('/:id/dailyStatus', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -198,7 +186,7 @@ router.patch('/:id/checklist/dailyStatus', (req, res) => {
     });
 });
 
-router.get('/:id/checklist/days/:day', (req, res) => {
+router.get('/:id/days/:day', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -216,7 +204,7 @@ router.get('/:id/checklist/days/:day', (req, res) => {
     })   
 });
 
-router.patch('/:id/checklist/days', (req, res) => {
+router.patch('/:id/days', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",
@@ -245,7 +233,7 @@ router.patch('/:id/checklist/days', (req, res) => {
 });
 
 
-router.patch('/:id/checklist/days/:day', (req, res) => {
+router.patch('/:id/days/:day', (req, res) => {
     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
     if (!findUser) return res.status(404).send({
         "message" : "The user does not exist",

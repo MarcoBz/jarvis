@@ -1,6 +1,7 @@
 const express = require('express')
 const Validation = require('./validation')
 const home = require('./routes/home')
+const user = require('./routes/user/user')
 const checklist = require('./routes/user/checklist')
 
 const validator = new Validation()
@@ -18,7 +19,8 @@ app.use(function(req, res, next) {
     next();
   });
 app.use('/', home)
-app.use('/api', checklist)
+app.use('/api/user', user)
+app.use('/api/checklist', checklist)
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
