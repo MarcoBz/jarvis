@@ -19,9 +19,8 @@ app.use(function(req, res, next) {
     next();
   });
 app.use('/', home)
-console.log("diocan")
 app.use('/api/user', user)
-//app.use('/api/checklist', checklist)
+app.use('/api/checklist', checklist)
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

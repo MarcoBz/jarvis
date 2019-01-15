@@ -3,11 +3,7 @@ const router = express.Router()
 const database = require("../../database")
 const schemas = require("../../utils/schemas")
 const utils = require("../../utils/mongoUtils")
-const mongoose = require("mongoose")
-mongoose.connect("mongodb://localhost:27017/Jarvis", { useNewUrlParser: true })
-    .then(() => console.log("Connected to MongoDb"))
-    .catch(err => console.error("Connection failed", err))
-
+const mongoose = require("../../utils/mongoConnection")
 
 userSchema = schemas.userSchema
 const User = mongoose.model("Population", userSchema)
