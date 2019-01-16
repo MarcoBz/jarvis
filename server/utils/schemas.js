@@ -13,6 +13,7 @@ actionSchema = new mongoose.Schema({
 
 daysSchema = new mongoose.Schema({
     day: String,
+    order: Number,
     actions: [actionSchema]
 })
 

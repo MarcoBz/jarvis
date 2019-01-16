@@ -18,11 +18,11 @@ router.get("/:user/days/:day", (req, res) => {
             "message" : "The user does not exist",
             "content" : false
         });  
-        
-        utils.query_dayID(findUser._id, req.params.day)
+        const Days = mongoose.model(String(findUser._id) + "_day", daysSchema)
+        utils.query_dayID(Days, req.params.day)
         .then((dayID) => {
             
-            utils.query_checklist(findUser._id, dayID)
+            utils.query_checklist(Days, dayID)
             .then((day) => {
                 let checklist = {}
                 for (let i = 0; i < day.actions.length;  i++ ){
@@ -65,9 +65,9 @@ router.post("/:user/days/:day", (req, res) => {
                 action: req.body.actions[action] 
             }))
         }
-
         const checklist = new Days({           
             day: req.params.day ,
+            order: req.body.order,
             actions: actionArray
         })
 
@@ -93,35 +93,34 @@ router.patch('/:user/days/:day', (req, res) => {
         if (!findUser._id)  return res.status(404).send({ 
             "message" : "The user does not exist",
             "content" : false
-        });     
-
-        utils.query_dayID(findUser._id, req.params.day)
+        });   
+        
+          
+        const Days = mongoose.model(String(findUser._id) + "_day", daysSchema)
+        utils.query_dayID(Days, req.params.day)
         .then((dayID) => {
-            
             for (let ops in req.body){
-
                 if (req.body[ops].op == "replace"){
+                    
                     let updatedAction = req.body[ops].path.split('/')[1]
-                    utils.update_action(findUser._id, dayID, updatedAction, req.body[ops].value)
+                    utils.update_action(Days, dayID, updatedAction, req.body[ops].value)
                 }
-                
                 else if (req.body[ops].op == "add"){                
                     let newAction = new Action({
                         action: req.body[ops].path.split('/')[1] 
                     })
-                    utils.add_action(findUser._id, dayID, newAction)
+                    utils.add_action(Days, dayID, newAction)
                 }
-    
                 else if (req.body[ops].op == "remove"){
                     let removedAction = req.body[ops].path.split('/')[1]
-                    utils.remove_action(findUser._id, dayID, removedAction)
+                    utils.remove_action(Days, dayID, removedAction)
                 }
             }
 
-            utils.query_dayID(findUser._id, req.params.day)
+            utils.query_dayID(Days, req.params.day)
             .then((dayID) => {
     
-                utils.query_checklist(findUser._id, dayID)
+                utils.query_checklist(Days, dayID)
                 .then((day) => {
                     let checklist = {}
                     for (let i = 0; i < day.actions.length;  i++ ){
@@ -156,156 +155,81 @@ router.patch('/:user/days/:day', (req, res) => {
     })
 })
 
+router.get("/:user/lastDay", (req, res) => {
+    utils.query_user(req.params.user) 
+    .then((findUser) => {
+        
+        if (!findUser._id)  return res.status(404).send({ 
+            "message" : "The user does not exist",
+            "content" : false
+        });  
+        const Days = mongoose.model(String(findUser._id) + "_day", daysSchema)
+        utils.query_lastDay(Days)
+        .then((lastDay) => console.log(lastDay))
+    }) 
+})
+
+router.get("/:user/actions", (req, res) => {
+    utils.query_user(req.params.user) 
+    .then((findUser) => {
+        
+        if (!findUser._id)  return res.status(404).send({ 
+            "message" : "The user does not exist",
+            "content" : false
+        });  
+        const Days = mongoose.model(String(findUser._id) + "_day", daysSchema)
+        utils.query_actions(Days)
+        .then((all_checklists) => {
+            list_actions = {}
+            for (checklist in all_checklists){
+                for (let i = 0; i < all_checklists[checklist].actions.length; i++ ){
+                    if (list_actions[all_checklists[checklist].actions[i].action]) list_actions[all_checklists[checklist].actions[i].action][0]++
+                    else list_actions[all_checklists[checklist].actions[i].action] = [1,0]
+                    if (all_checklists[checklist].actions[i].isDone) list_actions[all_checklists[checklist].actions[i].action][1]++
+                }
+            }
+            return res.status(200).send({
+                "message" : "List created",
+                "content" : list_actions
+            })
+        })
+    })
+})
+
+router.get("/:user/actions/:action", (req, res) => {
+    utils.query_user(req.params.user) 
+    .then((findUser) => {
+        
+        if (!findUser._id)  return res.status(404).send({ 
+            "message" : "The user does not exist",
+            "content" : false
+        }); 
+        const Days = mongoose.model(String(findUser._id) + "_day", daysSchema)
+        utils.query_actions(Days)
+        .then((all_checklists) => {
+            let queried_action = { queried_action: req.params.action,
+                result : [0,0]}
+            for (checklist in all_checklists){
+                for (let i = 0; i < all_checklists[checklist].actions.length; i++ ){
+                    if (all_checklists[checklist].actions[i].action == req.params.action){
+                        queried_action.result[0]++
+                        if (all_checklists[checklist].actions[i].isDone) queried_action.result[1]++
+                    }
+                }
+            }
+            if (queried_action.result[0] == 0) return res.status(404).send({
+                "message" : "The action does not exist",
+                "content" : false
+            }); 
+            else return res.status(200).send({
+                "message" : "The action exists",
+                "content" : queried_action
+            })
+        })
+    })
+})
+
 module.exports = router
-// router.patch('/:id/days/:day', (req, res) => {
-//     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-//     if (!findUser) return res.status(404).send({
-//         "message" : "The user does not exist",
-//         "content" : false
-//     }); 
-//     const day = req.params.day
-//     const findDay = findUser.days[day]; 
-//     if (!findDay) return res.status(404).send({
-//         "message" : "Not found the right day",
-//         "content" : false
-//     });
-
-//     for (let ops in req.body){
-
-//         if (req.body[ops].op == "replace"){
-//             let updatedAction = req.body[ops].path.split('/')[1]
-//             findUser.days[req.params.day][updatedAction] = req.body[ops].value
-//             let checkOrNotCheck
-//             if (req.body[ops].value == true ) checkOrNotCheck = 1
-//             else if (req.body[ops].value == false ) checkOrNotCheck = -1
-//             else checkOrNotCheck = 0
-//             findUser.actions[updatedAction][0] += checkOrNotCheck 
-//             let oldPercActions = 100 * parseInt(findUser.dailyRecap[day][0]) / parseInt(findUser.dailyRecap[day][1])
-//             let oldStatus = defineStatus(oldPercActions)
-//             findUser.dailyRecap[day][0] += checkOrNotCheck 
-//             let percActions = 100 * parseInt(findUser.dailyRecap[day][0]) / parseInt(findUser.dailyRecap[day][1])
-//             let status = defineStatus(percActions)
-//             findUser.dailyStatus[oldStatus] -= checkOrNotCheck 
-//             findUser.dailyStatus[status] += checkOrNotCheck 
-//             findUser.dailyRecap[day][2] = status
-//         }
-
-//         else if (req.body[ops].op == "add"){
-//             let newAction = req.body[ops].path.split('/')[1]
-//             if (newAction in findUser.days[req.params.day]) {
-//             }
-//             else {
-//                 if (req.body[ops].value == false ){
-//                     findUser.days[req.params.day][newAction] = req.body[ops].value
-//                     if (findUser.actions[newAction]) findUser.actions[newAction][1] += 1 
-//                     else findUser.actions[newAction] = [0,1]
-//                     let oldPercActions = 100 * parseInt(findUser.dailyRecap[day][0]) / parseInt(findUser.dailyRecap[day][1])
-//                     let oldStatus = defineStatus(oldPercActions)
-//                     findUser.dailyRecap[day][1] += 1 
-//                     let percActions = 100 * parseInt(findUser.dailyRecap[day][0]) / parseInt(findUser.dailyRecap[day][1])
-//                     let status = defineStatus(percActions)
-//                     findUser.dailyStatus[oldStatus] -= 1
-//                     findUser.dailyStatus[status] += 1
-//                     findUser.dailyRecap[day][2] = status
-//                 }
-//             } 
-
-//         }
-//         else if (req.body[ops].op == "remove"){
-//             let removedAction = req.body[ops].path.split('/')[1]
-//             if (removedAction in findUser.days[req.params.day]){
-//                 let oldPercActions = 100 * parseInt(findUser.dailyRecap[day][0]) / parseInt(findUser.dailyRecap[day][1])
-//                 let oldStatus = defineStatus(oldPercActions)
-//                 if ( findUser.days[day][removedAction]) {
-//                     findUser.dailyRecap[day][0] -= 1
-//                     findUser.actions[removedAction][0] -= 1                     
-//                 }
-//                 delete findUser.days[req.params.day][removedAction]
-//                 findUser.dailyRecap[day][1] -= 1
-//                 findUser.actions[removedAction][1] -= 1 
-//                 let percActions = 100 * parseInt(findUser.dailyRecap[day][0]) / parseInt(findUser.dailyRecap[day][1])
-//                 let status = defineStatus(percActions)
-//                 findUser.dailyStatus[oldStatus] -= 1
-//                 findUser.dailyStatus[status] += 1
-//                 findUser.dailyRecap[day][2] = status              
-//             }
-//         }
-//     }
-//     return res.status(204).send({
-//         "message" : "",
-//         "content" : findUser
-//     });
-// });
-// router.get('/:id/lastDay', (req, res) => {
-//     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-//     if (!findUser) return res.status(404).send({
-//         "message" : "The user does not exist",
-//         "content" : false
-//     }); 
-//     else res.status(200).send({
-//         "message" : "The user exists",
-//         "content" : findUser.lastDay
-//     })   
-// });
-
-// router.get('/:id/actions', (req, res) => {
-//     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-//     if (!findUser) return res.status(404).send({
-//         "message" : "The user does not exist",
-//         "content" : false
-//     }); 
-//     else res.status(200).send({
-//         "message" : "The user exists",
-//         "content" : findUser.actions
-//     })   
-// });
-
-// router.get('/:id/actions/:action', (req, res) => {
-//     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-//     if (!findUser) return res.status(404).send({
-//         "message" : "The user does not exist",
-//         "content" : false
-//     }); 
-
-//     const findAction = findUser.actions[req.params.action]; 
-//     if (!findAction) return res.status(404).send({
-//         "message" : "The action does not exist",
-//         "content" : false
-//     }); 
-//     else return res.status(200).send({
-//         "message" : "The action exists",
-//         "content" : findAction
-//     })   
-// });
-
-// router.patch('/:id/actions/', (req, res) => {
-//     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-//     if (!findUser) return res.status(404).send({
-//         "message" : "The user does not exist",
-//         "content" : false
-//     }); 
-
-//     if (req.body.op == "replace"){
-//         let updatedAction = req.body.path.split('/')[1]
-//         findUser.actions[updatedAction] = req.body.value
-//         return res.status(200).send({
-//             "message" : "Replaced value of action",
-//             "content" : findUser
-//         });
-//     }
-//     else if (req.body.op == "add"){
-//         let newAction = req.body.path.split('/')[1]
-//         findUser.actions[newAction] = req.body.value
-//         return send({
-//             "message" : "Added action",
-//             "content" : findUser
-//         });
-//     }
-//     return res.status(204).send({
-//         "message" : "No operations",
-//         "content" : findUser
-//     });
-// });
 
 // router.get('/:id/dailyRecap', (req, res) => {
 //     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
@@ -418,24 +342,6 @@ module.exports = router
 //         "message" : "No operations",
 //         "content" : findUser
 //     });
-// });
-
-// router.get('/:id/days/:day', (req, res) => {
-//     const findUser = database.find(c => c.id === parseInt(req.params.id)); 
-//     if (!findUser) return res.status(404).send({
-//         "message" : "The user does not exist",
-//         "content" : false
-//     }); 
-//     const findDay = findUser.days[req.params.day]; 
-//     if (!findDay) return res.status(404).send({
-//         "message" : "Not found the right day",
-//         "content" : false
-//     }); 
-
-//     else return res.status(200).send({
-//         "message" : "Found day",
-//         "content" : findDay
-//     })   
 // });
 
 // router.patch('/:id/days', (req, res) => {
