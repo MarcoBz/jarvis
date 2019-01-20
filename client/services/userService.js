@@ -1,29 +1,35 @@
+import Api from "./Api"
 
-import Api from './Api'
-
-export function fetchDailyChecklist (id, day) {
-  const route = id + '/days/' + day
+export function fetchDailyChecklist (user, day) {
+  const route = user + "/days/" + day
   return Api().get(route)
 }
 
-export function fetchDailyStatus (id) {
-  const route = id + '/dailyStatus'
-  return Api().get(route)
-}
-
-export function fetchLastDay (id) {
-  const route = id + '/lastDay'
-  return Api().get(route)
-}
-
-export function addDailyChecklist (id, body) {
-  const route = id + '/days/'
+export function patchDailyChecklist (user, day, body){
+  console.log(body)
+  const route = user + "/days/" + day
   return Api().patch(route, body)
+}
+
+// export function  (user) {
+//   const route = user + "/dailyStatus"
+//   return Api().get(route)
+// }
+
+export function fetchLastDay (user) {
+  const route = user + "/lastDay"
+  return Api().get(route)
+}
+
+export function addDailyChecklist (user, day, body) {
+  const route = user + "/days/" + day
+  return Api().post(route, body)
 }
 
 export default {
   fetchDailyChecklist,
-  fetchDailyStatus,
+  // fetchDailyStatus,
   fetchLastDay,
+  patchDailyChecklist,
   addDailyChecklist
 }

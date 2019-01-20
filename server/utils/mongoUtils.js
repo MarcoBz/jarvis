@@ -80,6 +80,7 @@ async function query_actions(Days){
         .find()
         .select({
             _id : 0,
+            day : 1,
             actions : 1
         })
     

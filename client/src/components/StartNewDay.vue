@@ -16,7 +16,7 @@ export default {
   props: ['day', 'lastday'],
   data () {
     return {
-        user: '1'
+        user: 'marco_bz'
     }
   },
 
@@ -26,7 +26,7 @@ export default {
            router.go('/');
       },
 
-    async startNewDailyChecklist () {    
+    async startNewDailyChecklist () {   
       let response
       try{
         response = await userService.fetchDailyChecklist(this.user, this.lastday)
@@ -35,15 +35,18 @@ export default {
         response = err.response
       }
       finally {
-        let lastDailyChecklist 
-        if (response.data.message === 'Found day') {
+        let lastDailyChecklist
+        if (response.data.message === 'Found checklist') {
             lastDailyChecklist = response.data.content
+            let actionsArray = []
+            for (let action in lastDailyChecklist.checklist){
+              actionsArray.push(action)
+            }
             let requestData = {
-                            "op" : 'add',
-                            "path" : '/' + this.day,
-                            "value" : lastDailyChecklist
+                            "order" : parseInt(lastDailyChecklist.order) + 1,
+                            "actions" : actionsArray
                         }
-            const addRequest = await userService.addDailyChecklist(this.user, requestData)
+            const addRequest = await userService.addDailyChecklist(this.user, this.day, requestData)
             router.go('/');
         }
       }

@@ -10,7 +10,7 @@ export default {
     name: 'Home',
     data () {
         return {
-            user: '1',
+            user: 'marco_bz',
             isStarted: false,
             actualDay: this.getDate(),
             lastDay: null,
@@ -39,7 +39,7 @@ export default {
                 this.component = () => this.loader()
             })
             .catch(() => {
-                // console.log('error')
+                // console.log('error') 
             })
     },
 
@@ -48,7 +48,7 @@ export default {
             let response = await (userService.fetchLastDay(this.user))
             let responseObj = JSON.parse(response.request.response)
             if (responseObj.message === 'The user exists') {
-                this.lastDay = responseObj.content
+                this.lastDay = responseObj.content.lastDay
                 if (this.lastDay === this.actualDay) this.isStarted = true
             }
         },

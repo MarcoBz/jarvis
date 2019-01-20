@@ -2,7 +2,7 @@
   <div id="app">
     <div id="header">
         <nav>
-          <router-link to="/dailyStatus">Daily Status</router-link>
+          <!-- <router-link to="/dailyStatus">Daily Status</router-link> -->
           <router-link to="/dailyRecap">Daily Recap</router-link>
           <router-link to="/actions">All Actions</router-link>
         </nav>
