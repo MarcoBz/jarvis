@@ -183,18 +183,32 @@ router.get("/:user/actions", (req, res) => {
         if (!findUser._id)  return res.status(404).send({ 
             "message" : "The user does not exist",
             "content" : false
-        });  
+        });
+        
         const Days = mongoose.model(String(findUser._id) + "_day", daysSchema)
         utils.query_actions(Days)
         .then((all_checklists) => {
-            list_actions = {}
+            list_actions = []
             for (checklist in all_checklists){
                 for (let i = 0; i < all_checklists[checklist].actions.length; i++ ){
-                    if (list_actions[all_checklists[checklist].actions[i].action]) list_actions[all_checklists[checklist].actions[i].action][0]++
-                    else list_actions[all_checklists[checklist].actions[i].action] = [1,0]
-                    if (all_checklists[checklist].actions[i].isDone) list_actions[all_checklists[checklist].actions[i].action][1]++
+                    let actionObject = list_actions.find(c => c.action === all_checklists[checklist].actions[i].action)
+                    if (actionObject) {
+                        actionObject.totalDays++
+                        if (all_checklists[checklist].actions[i].isDone) actionObject.checkedDays++
+                    }
+                    else{
+                        newActionObject = {
+                            action: all_checklists[checklist].actions[i].action,
+                            totalDays: 1,
+                            checkedDays: 0
+                        }
+                        if (all_checklists[checklist].actions[i].isDone) newActionObject.checkedDays++
+                        list_actions.push(newActionObject)
+                    }
+                    
                 }
             }
+            
             return res.status(200).send({
                 "message" : "List created",
                 "content" : list_actions

@@ -16,6 +16,11 @@ export function patchDailyChecklist (user, day, body){
 //   return Api().get(route)
 // }
 
+export function fetchAllActions (user) {
+  const route = user + "/actions"
+  return Api().get(route)
+}
+
 export function fetchLastDay (user) {
   const route = user + "/lastDay"
   return Api().get(route)
@@ -28,7 +33,7 @@ export function addDailyChecklist (user, day, body) {
 
 export default {
   fetchDailyChecklist,
-  // fetchDailyStatus,
+  fetchAllActions,
   fetchLastDay,
   patchDailyChecklist,
   addDailyChecklist

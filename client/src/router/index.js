@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import DailyChecklist from '@/components/DailyChecklist'
-// import Actions from '@/components/Actions'
+import Actions from '@/components/Actions'
 // import DailyStatus from '@/components/DailyStatus'
 // import DailyRecap from '@/components/DailyRecap'
 
@@ -21,11 +21,11 @@ export default new Router({
       name: 'Home',
       component: Home
     },
-    // {
-    //   path: '/Actions',
-    //   name: 'Actions',
-    //   component: Actions
-    // },
+    {
+      path: '/Actions',
+      name: 'Actions',
+      component: Actions
+    },
     // {
     //   path: '/DailyStatus',
     //   name: 'DailyStatus',
