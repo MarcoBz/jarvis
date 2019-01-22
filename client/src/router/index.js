@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import DailyChecklist from '@/components/DailyChecklist'
-import Actions from '@/components/Actions'
-// import DailyStatus from '@/components/DailyStatus'
-// import DailyRecap from '@/components/DailyRecap'
+import Home from '@/components/Checklist/Home'
+import DailyChecklist from '@/components/Checklist/DailyChecklist'
+import Actions from '@/components/Checklist/Actions'
+// import DailyStatus from '@/components/Checklist/DailyStatus'
+// import DailyRecap from '@/components/Checklist/DailyRecap'
 
 Vue.use(Router)
 

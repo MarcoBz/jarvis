@@ -20,8 +20,8 @@
 </template>
 
 <script>
-  import userService from '../../services/userService'
-  import router from '../router'
+  import userService from '../../services/userServiceChecklist'
+  import router from '../../router'
   export default {
     name: 'Actions',
     data () {
