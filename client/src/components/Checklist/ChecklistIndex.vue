@@ -29,7 +29,7 @@
 
 <script>
 import Home from './Home' 
-import userService from '../../services/userServiceChecklist'
+import userService from '../../../services/userServiceChecklist'
 import router from '../../router'
 export default {
   name: 'ChecklistIndex',
@@ -73,12 +73,12 @@ export default {
       this.year = null
       let today = this.getDate()
 
-      if (this.chosenDay === today) router.push('/');
+      if (this.chosenDay === today) router.push(('/Home'));
       else router.push({ name: 'DailyChecklist', params: { day: this.chosenDay }});
     },
 
     getCurrentDayChecklist () {
-      router.push('/')
+      router.push(('/Home'))
     },
 
     getDate () {

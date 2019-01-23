@@ -22,7 +22,7 @@ router.post("/:user", (req, res) => {
 
                 return res.status(200).send({ 
                     "message" : "User created",
-                    "content" : false
+                    "content" : true
                 });
             }
             else res.status(200).send({ 
@@ -35,7 +35,7 @@ router.post("/:user", (req, res) => {
 router.get("/:user", (req, res) => {
     utils.query_user(req.params.user) 
         .then((findUser) => {
-            if (!findUser._id)  return res.status(404).send({ 
+            if (!findUser)  return res.status(404).send({ 
                 "message" : "The user does not exist",
                 "content" : false
             }); 

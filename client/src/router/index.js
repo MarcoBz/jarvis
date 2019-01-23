@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Checklist/Home'
-import DailyChecklist from '@/components/Checklist/DailyChecklist'
-import Actions from '@/components/Checklist/Actions'
+import Home from '../components/Checklist/Home'
+import ChecklistIndex from '../components/Checklist/ChecklistIndex'
+import DailyChecklist from '../components/Checklist/DailyChecklist'
+import Actions from '../components/Checklist/Actions'
 // import DailyStatus from '@/components/Checklist/DailyStatus'
 // import DailyRecap from '@/components/Checklist/DailyRecap'
 
@@ -10,11 +11,16 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    // {
+    //   path: '/',
+    //   redirect: {
+    //     name: 'Home'
+    //   }
+    // },
     {
       path: '/',
-      redirect: {
-        name: 'Home'
-      }
+      name: 'ChecklistIndex',
+      component: ChecklistIndex
     },
     {
       path: '/Home',

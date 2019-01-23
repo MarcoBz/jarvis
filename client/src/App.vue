@@ -1,91 +1,66 @@
 <template>
   <div id="app">
     <div id="header">
-        <nav>
-          <!-- <router-link to="/dailyStatus">Daily Status</router-link> -->
-          <router-link to="/dailyRecap">Daily Recap</router-link>
-          <router-link to="/actions">All Actions</router-link>
-        </nav>
+      <h1>JARVIS</h1>
     </div>
     <div id="main">
-      <router-view :key="$route.fullPath"></router-view>
-      <!-- <home v-bind:actualday="actualDay" v-bind:chosenday="chosenDay"></home> -->
-    </div>
-    <div id="footer">
-      <div class="row justify-content-md-center">
-        <div class="col col-lg-2"><input type="text" placeholder="Day"  v-model="day"></div>
-        <div class="col col-lg-2"><input type="text" placeholder="Month"  v-model="month"></div>
-        <div class="col col-lg-2"><input type="text" placeholder="Year"  v-model="year"></div>
-        <div class="col col-lg-2"><button v-on:click="getDailyChecklist" v-bind:disabled="formFilled">Get Day</button></div>
-      </div>
-      <div class="row justify-content-md-center">
-        <div class="col col-lg">
-          <button v-on:click="getCurrentDayChecklist">Get Current Day</button>
+      <div class="container" v-show="userExist">
+          <div class = "row">
+            <input  id="userName" v-model="user" class = "col col-2 text-center" placeholder="User Name" v-bind:class="{ 'border border-danger' :userError}" v-on:keydown="deleteBorder()">
+            <button class = "col col-2 bg-light" v-on:click="getUser()"></button>
           </div>
       </div>
+      <router-view :key="$route.fullPath"></router-view>
+    </div>
+    <div id="footer">
+      Powered By MarcoBz
     </div>
   </div>
 </template>
 
 <script>
-import Home from './components/Home' 
+import ChecklistIndex from './components/Checklist/ChecklistIndex' 
 import userService from '../services/userService'
 import router from './router'
 export default {
   name: 'App',
-  components: {Home},
+  components: {ChecklistIndex},
   data () {
     return {
-      day: null,
-      month: null,
-      year: null,
-      dailyChecklist: null,
-      chosenDay: null,
-      formFilled: true
-    }
-  },
-
-  watch: {
-    day: function () {
-      if (this.day && this.month && this.year) this.formFilled = false
-      if (!this.day) this.formFilled = true
-    },
-
-    month: function () {
-      if (this.day && this.month && this.year) this.formFilled = false
-      if (!this.month) this.formFilled = true
-    },
-
-    year: function () {
-      if (this.day && this.month && this.year) this.formFilled = false
-      if (!this.year) this.formFilled = true
+      user: null,
+      userError: false,
+      userExist: false
     }
   },
 
   methods: {
-    async getDailyChecklist () {
-      const id = 1
-      if (this.day < 10) this.day = '0' + parseInt(this.day)
-      if (this.month < 10) this.month = '0' + parseInt(this.month)
-      this.chosenDay = this.day + '.' + this.month + '.' + this.year
-      this.day = null
-      this.month = null
-      this.year = null
-      let today = this.getDate()
 
-      if (this.chosenDay === today) router.push('/');
-      else router.push({ name: 'DailyChecklist', params: { day: this.chosenDay }});
+    async getUser () {
+      let response
+      try{
+        response = await (userService.fetchUser(this.user))
+      }
+      catch (err){
+        response = err.response
+      }
+      finally {
+        if (response.data.content) {
+          this.userExist = true
+          router.push(('/Home'))  
+          }
+        else {
+          this.user = null
+          this.userError = true
+          }
+      }
+      
+      
     },
 
-    getCurrentDayChecklist () {
-      router.push('/')
-    },
-
-    getDate () {
-        let today = new Date().toISOString()
-        let todayFormatted = today.split('T')[0].split('-')[2] + '.' + today.split('T')[0].split('-')[1] + '.' + today.split('T')[0].split('-')[0]
-        return todayFormatted
+    deleteBorder(){
+      this.userError = false
     }
+
   }
 }
 </script>
