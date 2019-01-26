@@ -8,7 +8,8 @@
         </nav>
     </div>
     <div id="main">
-      <router-view :key="$route.fullPath"></router-view>
+      <!-- <router-view :key="$route.fullPath"></router-view> -->
+      <router-view></router-view>
       <!-- <home v-bind:actualday="actualDay" v-bind:chosenday="chosenDay"></home> -->
     </div>
     <div id="footer">
@@ -60,6 +61,11 @@ export default {
       if (this.day && this.month && this.year) this.formFilled = false
       if (!this.year) this.formFilled = true
     }
+  },
+
+  mounted(){
+    console.log('test')
+    //router.push('/Checklist/Home')
   },
 
   methods: {

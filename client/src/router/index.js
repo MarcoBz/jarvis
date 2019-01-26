@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '../components/Checklist/Home'
 import Login from '../components/Login'
 import ChecklistPage from '../components/Checklist/ChecklistPage'
+import OpenSpace from '../components/OpenSpace'
 import DailyChecklist from '../components/Checklist/DailyChecklist'
 import Actions from '../components/Checklist/Actions'
 // import DailyStatus from '@/components/Checklist/DailyStatus'
@@ -17,6 +18,11 @@ export default new Router({
       name: 'Login',
       component: Login
     },
+    {
+      path: '/OpenSpace',
+      name: 'OpenSpace',
+      component: OpenSpace
+    },
     // {
     //   path: '/',
     //   redirect: {
@@ -26,8 +32,14 @@ export default new Router({
 
     {
       path: '/Checklist',
-      name: 'ChecklistPage',
-      component: ChecklistPage
+      // name: 'ChecklistPage',
+      component: ChecklistPage,
+      children: [
+        {
+          path: '',
+          component: Home
+        }
+      ]
     }
     // {
     //   path: '/Home',

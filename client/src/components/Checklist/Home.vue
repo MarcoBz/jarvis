@@ -18,7 +18,8 @@ export default {
         }
     },
 
-    created () {
+    mounted () {
+        console.log('test1')
     },
 
     computed: {

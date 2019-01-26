@@ -34,7 +34,7 @@
         finally {
           if (response.data.content) {
               this.userExist = true
-              router.push(('/Checklist'))  
+              router.push(('/OpenSpace'))  
             }
           else {
             this.user = null

@@ -3,7 +3,8 @@ const mongoose = require("./mongoConnection")
 userSchema = new mongoose.Schema({
     user: String,
     name: String,
-    surname: String
+    surname: String, 
+    rooms: [String]
 })
 
 actionSchema = new mongoose.Schema({

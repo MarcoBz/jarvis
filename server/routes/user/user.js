@@ -11,11 +11,12 @@ const User = mongoose.model("Population", userSchema)
 router.post("/:user", (req, res) => {
     utils.query_user(req.params.user) 
         .then((findUser) => {
-            if (!findUser.id)  {
+            if (!findUser)  {
                 user = new User({
                         user : req.params.user,
                         name : req.body.name,
-                        surname : req.body.surname
+                        surname : req.body.surname,
+                        rooms : ['Checklist']
                     })
                 
                 user.save()
