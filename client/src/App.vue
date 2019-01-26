@@ -4,13 +4,7 @@
       <h1>JARVIS</h1>
     </div>
     <div id="main">
-      <div class="container" v-show="userExist">
-          <div class = "row">
-            <input  id="userName" v-model="user" class = "col col-2 text-center" placeholder="User Name" v-bind:class="{ 'border border-danger' :userError}" v-on:keydown="deleteBorder()">
-            <button class = "col col-2 bg-light" v-on:click="getUser()"></button>
-          </div>
-      </div>
-      <router-view :key="$route.fullPath"></router-view>
+      <router-view />
     </div>
     <div id="footer">
       Powered By MarcoBz
@@ -19,49 +13,25 @@
 </template>
 
 <script>
-import ChecklistIndex from './components/Checklist/ChecklistIndex' 
 import userService from '../services/userService'
 import router from './router'
 export default {
   name: 'App',
-  components: {ChecklistIndex},
   data () {
     return {
-      user: null,
-      userError: false,
-      userExist: false
+
     }
   },
 
-  methods: {
+  mounted(){
+    router.push('/Login')
+  },
 
-    async getUser () {
-      let response
-      try{
-        response = await (userService.fetchUser(this.user))
-      }
-      catch (err){
-        response = err.response
-      }
-      finally {
-        if (response.data.content) {
-          this.userExist = true
-          router.push(('/Home'))  
-          }
-        else {
-          this.user = null
-          this.userError = true
-          }
-      }
-      
-      
-    },
+  // methods: {
 
-    deleteBorder(){
-      this.userError = false
-    }
 
-  }
+
+  // }
 }
 </script>
 

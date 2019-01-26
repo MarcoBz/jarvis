@@ -8,41 +8,46 @@
 </template>
 
 <script>
-import userService from '../../../services/userServiceChecklist'
-import router from '../../router'
-export default {
-  name: 'Login',
-  props: [],
-  data () {
-    return {
-    }
-  },
-
-  methods: {
-    async getUser () {
-      let response
-      try{
-        response = await (userService.fetchUser(this.user))
+  import userService from '../../services/userService'
+  import router from '../router'
+  export default {
+    name: 'Login',
+    data () {
+      return {
+        user: null,
+        userError: false,
+        userExist: false
       }
-      catch (err){
-        response = err.response
-      }
-      finally {
-        if (response.data.content) {
-          this.userExist = true
-          router.push(('/Home'))  
-          }
-        else {
-          this.user = null
-          this.userError = true
-          }
-      }
-      
-      
     },
+    mounted () {
 
-    deleteBorder(){
-      this.userError = false
+    },
+    methods: {
+      async getUser () {
+        let response
+        try{
+          response = await (userService.fetchUser(this.user))
+        }
+        catch (err){
+          response = err.response
+        }
+        finally {
+          if (response.data.content) {
+              this.userExist = true
+              router.push(('/Checklist'))  
+            }
+          else {
+            this.user = null
+            this.userError = true
+            }
+        }
+        
+        
+      },
+
+      deleteBorder(){
+        this.userError = false
+      }
     }
   }
 </script>

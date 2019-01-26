@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Checklist/Home'
-import ChecklistIndex from '../components/Checklist/ChecklistIndex'
+import Login from '../components/Login'
+import ChecklistPage from '../components/Checklist/ChecklistPage'
 import DailyChecklist from '../components/Checklist/DailyChecklist'
 import Actions from '../components/Checklist/Actions'
 // import DailyStatus from '@/components/Checklist/DailyStatus'
@@ -11,42 +12,48 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/Login',
+      name: 'Login',
+      component: Login
+    },
     // {
     //   path: '/',
     //   redirect: {
-    //     name: 'Home'
+    //     name: 'Login'
     //   }
     // },
+
     {
-      path: '/',
-      name: 'ChecklistIndex',
-      component: ChecklistIndex
-    },
-    {
-      path: '/Home',
-      name: 'Home',
-      component: Home
-    },
-    {
-      path: '/Actions',
-      name: 'Actions',
-      component: Actions
-    },
+      path: '/Checklist',
+      name: 'ChecklistPage',
+      component: ChecklistPage
+    }
     // {
-    //   path: '/DailyStatus',
-    //   name: 'DailyStatus',
-    //   component: DailyStatus
+    //   path: '/Home',
+    //   name: 'Home',
+    //   component: Home
     // },
     // {
-    //   path: '/DailyRecap',
-    //   name: 'DailyRecap',
-    //   component: DailyRecap
-    // },    
-    {
-      path: '/DailyChecklist/:day',
-      name: 'DailyChecklist',
-      props: true,
-      component: DailyChecklist
-    }
+    //   path: '/Actions',
+    //   name: 'Actions',
+    //   component: Actions
+    // },
+    // // {
+    // //   path: '/DailyStatus',
+    // //   name: 'DailyStatus',
+    // //   component: DailyStatus
+    // // },
+    // // {
+    // //   path: '/DailyRecap',
+    // //   name: 'DailyRecap',
+    // //   component: DailyRecap
+    // // },    
+    // {
+    //   path: '/DailyChecklist/:day',
+    //   name: 'DailyChecklist',
+    //   props: true,
+    //   component: DailyChecklist
+    // }
   ]
 })

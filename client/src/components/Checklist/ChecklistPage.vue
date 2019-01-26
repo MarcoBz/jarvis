@@ -32,7 +32,7 @@ import Home from './Home'
 import userService from '../../../services/userServiceChecklist'
 import router from '../../router'
 export default {
-  name: 'ChecklistIndex',
+  name: 'ChecklistPage',
   components: {Home},
   data () {
     return {
