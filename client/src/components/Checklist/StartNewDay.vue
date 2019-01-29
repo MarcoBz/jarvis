@@ -19,12 +19,8 @@ export default {
         user: 'marco_bz'
     }
   },
-
+  
   methods: {
-
-      test () {
-           router.go('/');
-      },
 
     async startNewDailyChecklist () {   
       let response

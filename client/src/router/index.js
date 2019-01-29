@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../components/Checklist/Home'
+import StartNewDay from '../components/Checklist/StartNewDay'
 import Login from '../components/Login'
 import ChecklistPage from '../components/Checklist/ChecklistPage'
 import OpenSpace from '../components/OpenSpace'
@@ -23,49 +23,25 @@ export default new Router({
       name: 'OpenSpace',
       component: OpenSpace
     },
-    // {
-    //   path: '/',
-    //   redirect: {
-    //     name: 'Login'
-    //   }
-    // },
-
     {
       path: '/Checklist',
       // name: 'ChecklistPage',
       component: ChecklistPage,
       children: [
         {
-          path: '',
-          component: Home
+          path: '/Checklist/StartNewDay',
+          name: 'StartNewDay',
+          props: true,
+          component: StartNewDay
+        },
+        {
+          path: '/DailyChecklist',
+          name: 'DailyChecklist',
+          component: DailyChecklist,
+          props: true
+
         }
       ]
     }
-    // {
-    //   path: '/Home',
-    //   name: 'Home',
-    //   component: Home
-    // },
-    // {
-    //   path: '/Actions',
-    //   name: 'Actions',
-    //   component: Actions
-    // },
-    // // {
-    // //   path: '/DailyStatus',
-    // //   name: 'DailyStatus',
-    // //   component: DailyStatus
-    // // },
-    // // {
-    // //   path: '/DailyRecap',
-    // //   name: 'DailyRecap',
-    // //   component: DailyRecap
-    // // },    
-    // {
-    //   path: '/DailyChecklist/:day',
-    //   name: 'DailyChecklist',
-    //   props: true,
-    //   component: DailyChecklist
-    // }
   ]
 })

@@ -6,9 +6,9 @@
     <div id="main">
       <router-view />
     </div>
-    <div id="footer">
+    <!-- <div id="footer">
       Powered By MarcoBz
-    </div>
+    </div> -->
   </div>
 </template>
 
