@@ -19,7 +19,11 @@ export default {
         user: 'marco_bz'
     }
   },
-  
+
+  mounted(){
+    console.log('7')
+  },
+
   methods: {
 
     async startNewDailyChecklist () {   

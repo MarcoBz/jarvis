@@ -3,7 +3,7 @@
     <div id="header">
         <nav>
           <!-- <router-link to="/dailyStatus">Daily Status</router-link> -->
-          <router-link to="{ name: 'DailyChecklist', params: { day: '25.01.2019'}}">Daily Recap</router-link>
+          <router-link to="/dailyRecap">Daily Recap</router-link>
           <router-link to="/actions">All Actions</router-link>
         </nav>
     </div>
@@ -66,25 +66,14 @@ export default {
     }
   },
 
-  beforeRouteUpdate (to,from,next) {
-    this.thisDay = to.params.day
-    this.checkExistenceChecklist()
-      .then( checkExistence => {
-        if (checkExistence) next()
-        else next('/Checklist') 
-      })
-  },
-
   mounted(){
     this.getLastDay()
       .then(() => {
+        this.isReady = true
         if (!this.isStarted) {  
-          this.isReady = true
-          
           router.push({ name: 'StartNewDay', params: { day: this.actualDay, lastday: this.lastDay }})
         }
         else {
-          this.isStarted = false
           router.push({ name: 'DailyChecklist', params: { day: this.actualDay}})
         }
       })
@@ -94,21 +83,6 @@ export default {
   },
 
   methods: {
-    
-    async checkExistenceChecklist(){
-      
-      let response
-      try{
-        response = await userService.fetchDailyChecklist(this.user, this.thisDay)
-      }
-      catch (err){
-        response = err.response
-      }
-      finally {
-        if (response.data.content) return true
-        else return false
-      }
-    },
 
     async getDailyChecklist () {
       const id = 1
@@ -120,7 +94,9 @@ export default {
       this.year = null
       let today = this.getDate()
       if (this.chosenDay === today) this.getCurrentDayChecklist ()
-      router.push({ name: 'DailyChecklist', params: { day: this.chosenDay}})
+      else {
+        
+        router.push({ name: 'DailyChecklist', params: { day: this.chosenDay}})}
     },
 
     getCurrentDayChecklist () {
@@ -130,8 +106,6 @@ export default {
             router.push({ name: 'StartNewDay', params: { day: this.actualDay, lastday: this.lastDay }})
           }
           else {
-            this.isStarted = false
-            console.log(this.actualDay)
             router.push({ name: 'DailyChecklist', params: { day: this.actualDay}})
           }
         })

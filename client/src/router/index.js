@@ -35,7 +35,7 @@ export default new Router({
           component: StartNewDay
         },
         {
-          path: '/DailyChecklist',
+          path: '/Checklist/:day',
           name: 'DailyChecklist',
           component: DailyChecklist,
           props: true

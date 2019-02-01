@@ -55,13 +55,14 @@
       this.isToday = this.checkIfIsToday()
     },
 
-
-
-
-    // beforeRouteEnter (to,from,next) {
-
-    // },
-
+  beforeRouteUpdate (to,from,next) {  
+    this.thisDay = to.params.day
+    this.checkExistenceChecklist()
+      .then( checkExistence => {
+        if (checkExistence ) next()
+        else next('/Checklist')
+      })
+  },
 
     methods: {
 
@@ -195,6 +196,21 @@
             this.defineDoneTotalActions()
             this.defineComment()
             }
+        }
+      },
+
+      async checkExistenceChecklist(){
+        let response
+        try{
+          response = await userService.fetchDailyChecklist(this.user, this.thisDay)
+          console.log(response)
+        }
+        catch (err){
+          response = err.response
+        }
+        finally {
+          if (response.data.content) return true
+          else return false
         }
       },
 
