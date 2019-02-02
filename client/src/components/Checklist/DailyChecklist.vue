@@ -59,7 +59,12 @@
     this.thisDay = to.params.day
     this.checkExistenceChecklist()
       .then( checkExistence => {
-        if (checkExistence ) next()
+        if (checkExistence ) {
+          this.getDailyChecklist()
+          this.isToday = this.checkIfIsToday()
+          next()
+          
+        }
         else next('/Checklist')
       })
   },
@@ -184,6 +189,7 @@
         }
         finally {
           if (response.data.message === 'Found checklist') {
+            this.dailyChecklist = []
             for (let action in response.data.content.checklist ){
               let actionObject = {
                 action: action,

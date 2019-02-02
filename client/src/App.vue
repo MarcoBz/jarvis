@@ -1,10 +1,22 @@
 <template>
   <div id="app">
     <div id="header">
-      <h1>JARVIS</h1>
+      <div class="row border-bottom border-width">
+        <h1>JARVIS</h1>
+      </div>
     </div>
     <div id="main">
-      <router-view />
+      <div class="container">
+        <div class="row">
+          <div class="col col-2">
+          </div>
+          <div class="col col-8">
+            <router-view />
+          </div>
+          <div class="col col-2">
+          </div>
+        </div>
+      </div>
     </div>
     <!-- <div id="footer">
       Powered By MarcoBz
@@ -36,7 +48,13 @@ export default {
 </script>
 
 <style>
+
+.border-width{
+    border-width: thick;
+}
+
 #app {
+  
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -46,6 +64,7 @@ export default {
 }
 
 #footer {
+  background-color: : red;
    position:fixed;
    left:0px;
    bottom:0px;
