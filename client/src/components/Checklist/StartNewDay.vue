@@ -13,16 +13,13 @@ import userService from '../../../services/userServiceChecklist'
 import router from '../../router'
 export default {
   name: 'StartNewDay',
-  props: ['day', 'lastday'],
+  props: ['day', 'lastday', 'currentUser'],
   data () {
     return {
-        user: 'marco_bz'
+      user: this.currentUser
     }
   },
 
-  mounted(){
-    console.log('7')
-  },
 
   methods: {
 

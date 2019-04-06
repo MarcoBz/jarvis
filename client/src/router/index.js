@@ -6,8 +6,10 @@ import ChecklistPage from '../components/Checklist/ChecklistPage'
 import OpenSpace from '../components/OpenSpace'
 import DailyChecklist from '../components/Checklist/DailyChecklist'
 import Actions from '../components/Checklist/Actions'
-// import DailyStatus from '@/components/Checklist/DailyStatus'
-// import DailyRecap from '@/components/Checklist/DailyRecap'
+import TvSeriesPage from '../components/TvSeries/TvSeriesPage'
+import SearchTvSeries from '../components/TvSeries/SearchTvSeries'
+import WatchList from '../components/TvSeries/WatchList'
+import OnWatch from '../components/TvSeries/OnWatch'
 
 Vue.use(Router)
 
@@ -16,16 +18,19 @@ export default new Router({
     {
       path: '/Login',
       name: 'Login',
-      component: Login
+      component: Login,
+      props: true,
     },
     {
       path: '/OpenSpace',
       name: 'OpenSpace',
-      component: OpenSpace
+      component: OpenSpace,
+      props: true,
     },
     {
       path: '/Checklist',
-      // name: 'ChecklistPage',
+      name: 'Checklist',
+      props: true,
       component: ChecklistPage,
       children: [
         {
@@ -41,6 +46,32 @@ export default new Router({
           props: true
 
         }
+      ]
+    },
+    {
+      path: '/TvSeries',
+      name: 'TvSeries',
+      props: true,
+      component: TvSeriesPage,
+      children:[
+        {
+          path: '/TvSeries/SearchTvSeries',
+          name: 'SearchTvSeries',
+          props: true,
+          component: SearchTvSeries
+        },
+        {
+          path: '/TvSeries/WatchList',
+          name: 'WatchList',
+          props: true,
+          component: WatchList
+        } ,
+        {
+          path: '/TvSeries/OnWatch',
+          name: 'OnWatch',
+          props: true,
+          component: OnWatch
+        }           
       ]
     }
   ]

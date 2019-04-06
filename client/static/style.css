@@ -1,4 +1,6 @@
-
+body{
+    background-color: rgb(211, 204, 171);
+}
 
 .row{
     padding-left : 20px;
@@ -39,4 +41,4 @@
 .headerPage{
     width : 100%;
     background-color: #f3f1f2;
-}
+} 

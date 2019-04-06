@@ -3,7 +3,7 @@
         <!-- <input  id="userName" v-model="user" class = "col col-2 text-center" placeholder="User Name" v-bind:class="{ 'border border-danger' :userError}" v-on:keydown="deleteBorder()">
         <button class = "col col-2 bg-light" v-on:click="getUser()"></button> -->
         <div v-for = "room in rooms" class="row">
-          <button v-on:click="goTo(room.room)" :disabled = "!room.open">{{room.room}}</button>
+          <button v-on:click= "goTo(room.room)" :disabled = "!room.open">{{room.room}}</button>
         </div>
   </div>
 </template>
@@ -14,9 +14,10 @@
   import rooms from '../rooms'
   export default {
     name: 'Login',
+    props: ['currentUser'],
     data () {
       return {
-        user: "marco_bz",
+        user: this.currentUser,
         rooms: [],
         userRooms: [],
         isReady: false
@@ -32,6 +33,7 @@
         response = err.response
       }
       finally {
+        
         if (response.data.content) {
             this.userRooms = response.data.content.rooms
             for (let i = 0; i < rooms.length; i++){
@@ -58,8 +60,10 @@
     methods: {
 
       goTo(room){
-        let path = "/" + String(room)
-        router.push(path)
+        this.$emit('changeRoom', room)
+        //let path = "/" + String(room)
+        let pathName = String(room)
+        router.push({ name : pathName, params : { currentUser : this.user }})
       },
 
       deleteBorder(){

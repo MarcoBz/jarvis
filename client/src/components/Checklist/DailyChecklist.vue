@@ -34,10 +34,10 @@
   import router from '../../router'
   export default {
     name: 'DailyChecklist',
-    props: ['day'],
+    props: ['day', 'currentUser'],
     data () {
       return {
-        user: 'marco_bz',
+        user: this.currentUser,
         thisDay: this.day,
         isToday: null,
         dailyChecklist: [],
@@ -51,6 +51,7 @@
     },
 
     mounted () {
+      console.log(this.user)
       this.getDailyChecklist()
       this.isToday = this.checkIfIsToday()
     },
@@ -60,6 +61,7 @@
     this.checkExistenceChecklist()
       .then( checkExistence => {
         if (checkExistence ) {
+          this.onModification = false
           this.getDailyChecklist()
           this.isToday = this.checkIfIsToday()
           next()

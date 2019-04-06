@@ -34,7 +34,8 @@
         finally {
           if (response.data.content) {
               this.userExist = true
-              router.push(('/OpenSpace'))  
+              this.$emit('changeRoom', 'Open-Space')
+              router.push({ name: 'OpenSpace', params: { currentUser : this.user }})  
             }
           else {
             this.user = null

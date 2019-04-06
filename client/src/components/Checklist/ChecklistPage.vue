@@ -12,7 +12,7 @@
       <router-view></router-view>
       <!-- <home v-bind:actualday="actualDay" v-bind:chosenday="chosenDay"></home> -->
     </div>
-    <div id="footer">
+    <div >
       <div class="row justify-content-md-center">
         <div class="col col-lg-2"><input type="text" placeholder="Day"  v-model="day"></div>
         <div class="col col-lg-2"><input type="text" placeholder="Month"  v-model="month"></div>
@@ -33,9 +33,10 @@ import userService from '../../../services/userServiceChecklist'
 import router from '../../router'
 export default {
   name: 'ChecklistPage',
+  props: ["currentUser"],
   data () {
     return {
-      user: "marco_bz",
+      user: this.currentUser,
       day: null,
       month: null,
       year: null,
@@ -71,10 +72,10 @@ export default {
       .then(() => {
         this.isReady = true
         if (!this.isStarted) {  
-          router.push({ name: 'StartNewDay', params: { day: this.actualDay, lastday: this.lastDay }})
+          router.push({ name: 'StartNewDay', params: { day: this.actualDay, lastday: this.lastDay, currentUser: this.user }})
         }
         else {
-          router.push({ name: 'DailyChecklist', params: { day: this.actualDay}})
+          router.push({ name: 'DailyChecklist', params: { day: this.actualDay, currentUser: this.user}})
         }
       })
       .catch(() => {
@@ -96,17 +97,17 @@ export default {
       if (this.chosenDay === today) this.getCurrentDayChecklist ()
       else {
         
-        router.push({ name: 'DailyChecklist', params: { day: this.chosenDay}})}
+        router.push({ name: 'DailyChecklist', params: { day: this.chosenDay, currentUser: this.user}})}
     },
 
     getCurrentDayChecklist () {
       this.getLastDay()
         .then(() => {
           if (!this.isStarted) {  
-            router.push({ name: 'StartNewDay', params: { day: this.actualDay, lastday: this.lastDay }})
+            router.push({ name: 'StartNewDay', params: { day: this.actualDay, lastday: this.lastDay, currentUser: this.user }})
           }
           else {
-            router.push({ name: 'DailyChecklist', params: { day: this.actualDay}})
+            router.push({ name: 'DailyChecklist', params: { day: this.actualDay, currentUser: this.user}})
           }
         })
         .catch(() => {

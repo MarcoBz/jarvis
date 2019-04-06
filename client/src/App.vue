@@ -1,8 +1,17 @@
 <template>
   <div id="app">
-    <div id="header">
-      <div class="row border-bottom border-width">
-        <h1>JARVIS</h1>
+    <div id="header" >
+      <div class="container border-header">
+        <div class="row">
+          <div class="col col-2">
+            <h2>JARVIS</h2>
+          </div>
+          <div class="col col-8">
+            <h1 v-html = "room"></h1>
+          </div>
+          <div class="col col-2">
+          </div>
+        </div>
       </div>
     </div>
     <div id="main">
@@ -11,16 +20,16 @@
           <div class="col col-2">
           </div>
           <div class="col col-8">
-            <router-view />
+            <router-view @changeRoom="changeTitle" />
           </div>
           <div class="col col-2">
           </div>
         </div>
       </div>
     </div>
-    <!-- <div id="footer">
+    <div id="footer">
       Powered By MarcoBz
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -31,7 +40,7 @@ export default {
   name: 'App',
   data () {
     return {
-
+      room: "Login"
     }
   },
 
@@ -39,22 +48,27 @@ export default {
     router.push('/Login')
   },
 
-  // methods: {
+  methods: {
+    changeTitle(title) {
+      this.room = title
+    }
 
 
-
-  // }
+  }
 }
 </script>
 
-<style>
+<style scoped>
 
-.border-width{
-    border-width: thick;
+#header{
+  padding: 50px;
+}
+
+.border-header{
+  border-bottom:  3px solid black;
 }
 
 #app {
-  
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -64,11 +78,10 @@ export default {
 }
 
 #footer {
-  background-color: : red;
    position:fixed;
    left:0px;
    bottom:0px;
-   height:80px;
+   height:40px;
    width:100%;
    background:#999;
 }
