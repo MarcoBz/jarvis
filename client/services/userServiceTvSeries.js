@@ -20,6 +20,11 @@ export function fetchOnWatch (user) {
   return Api().get(route)
 }
 
+export function fetchMemory (user) {
+  const route = "tvseries/" + user + "/memory"
+  return Api().get(route)
+}
+
 export function patchTvSeries (user, tmdbID, body) {
   const route = "tvseries/" + user + "/tvSeriesID/" + tmdbID
   return Api().patch(route, body)
@@ -36,5 +41,6 @@ export default {
   patchTvSeries,
   fetchOnWatch,
   fetchTvSeriesSeasons,
-  fetchAll
+  fetchAll,
+  fetchMemory
 }

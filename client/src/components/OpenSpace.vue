@@ -1,9 +1,13 @@
 <template>
-  <div v-if="isReady" class="container">
+  <div v-if="isReady" class="container-fluid">
         <!-- <input  id="userName" v-model="user" class = "col col-2 text-center" placeholder="User Name" v-bind:class="{ 'border border-danger' :userError}" v-on:keydown="deleteBorder()">
         <button class = "col col-2 bg-light" v-on:click="getUser()"></button> -->
         <div v-for = "room in rooms" class="row">
-          <button v-on:click= "goTo(room.room)" :disabled = "!room.open">{{room.room}}</button>
+
+          <div class = "col">           
+             <button class="btn" v-on:click= "goTo(room.room)" :disabled = "!room.open">{{room.room}}</button>
+          </div>
+
         </div>
   </div>
 </template>

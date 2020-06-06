@@ -1,8 +1,8 @@
 <template>
     <div id="watchlist">
-      <div v-if="isReady" class="container">
+      <div v-if="isReady" class="container-fluid">
         <div v-for= "title in tvSeries" class= "row">
-          <div class= "col col-12">
+          <div class= "col col-sm-12">
             <button class="btn" v-on:click = "getTvSeriesDetails(title.tmdbID)">{{title.title}}</button>
           </div>
         </div>
@@ -15,49 +15,49 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <div class="container-fluid">
-                      <div class="row justify-content-md-center">
-                        <div class="col-md-12"><h3 class="modal-title">{{tvSeriesDetails.title}}</h3> </div>
+                      <div class="row justify-content-sm-center">
+                        <div class="col-sm-12"><h3 class="modal-title">{{tvSeriesDetails.title}}</h3> </div>
                       </div>
                     </div>
                   </div>
                   <div class="modal-body">
                     <div class="container-fluid">
-                      <div class="row justify-content-md-center">
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center">
+                        <div class="col-sm-12">
                           <span v-for= "genre in tvSeriesDetails.genres">{{genre}} </span> 
                         </div>
                       </div>
                       <hr>
-                      <div class="row justify-content-md-center">
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center">
+                        <div class="col-sm-12">
                           <span v-for= "network in tvSeriesDetails.networks">{{network}} </span> 
                         </div>
                       </div>
                       <hr>
-                      <div class="row justify-content-md-center" v-for= "season in tvSeriesDetails.seasons" >
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center" v-for= "season in tvSeriesDetails.seasons" >
+                        <div class="col-sm-12">
                           Season {{season.seasonNumber}} : {{season.numEpisodes}} Episodes
                         </div>
                       </div>   
                       <hr>
-                      <div class="row justify-content-md-center" v-if="tvSeriesDetails.lastEpAired.airDate">
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center" v-if="tvSeriesDetails.lastEpAired.airDate">
+                        <div class="col-sm-12">
                           Last Episode : S{{tvSeriesDetails.lastEpAired.seasonNumber}}E{{tvSeriesDetails.lastEpAired.episodeNumber}} - {{tvSeriesDetails.lastEpAired.airDate}}
                         </div>
                       </div>
-                      <div class="row justify-content-md-center" v-else>
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center" v-else>
+                        <div class="col-sm-12">
                           Last Episode : --
                         </div>
                       </div>
                       <hr>
-                      <div class="row justify-content-md-center" v-if="tvSeriesDetails.nextEpAired.airDate">
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center" v-if="tvSeriesDetails.nextEpAired.airDate">
+                        <div class="col-sm-12">
                           Next Episode : S{{tvSeriesDetails.nextEpAired.seasonNumber}}E{{tvSeriesDetails.nextEpAired.episodeNumber}} - {{tvSeriesDetails.nextEpAired.airDate}}
                         </div>
                       </div>    
-                      <div class="row justify-content-md-center" v-else>
-                        <div class="col-md-12">
+                      <div class="row justify-content-sm-center" v-else>
+                        <div class="col-sm-12">
                           Next Episode : --
                         </div>
                       </div>                 
@@ -65,39 +65,37 @@
                   </div>
                   <div class="modal-footer">
                     <div class="container-fluid">
-                      <div class="row justify-content-md-center">
-                        <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-sm-4 text-center">
                           <button type="button" class="close" @click="showModal=false">
                             <!-- <span aria-hidden="true">&times;</span> -->
                             <span aria-hidden="true">Close</span> 
                           </button>                          
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-sm-4 text-center">
                           <button type="button" class="close" v-on:click= "changeTvSeriesStatus(tvSeriesDetails.tmdbID)">
                             <!-- <span aria-hidden="true">&times;</span> -->
                             <span aria-hidden="true">Start</span> 
                           </button> 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-sm-4 text-center">
                           <button type="button" class="close"@click="deletingTvSeries=true">
                             <!-- <span aria-hidden="true">&times;</span> -->
                             <span aria-hidden="true">Delete</span> 
                           </button> 
                         </div>
                       </div>
-                      <div v-if="deletingTvSeries" class="row justify-content-md-center">
-                        <div class="col-md-4">
-                          <div class="col-md-12"><h4 class="modal-title">Are You Sure?</h4> </div>
-                        </div>
+                      <div v-if="deletingTvSeries" class="row">
+                        <div class="col-sm-12"><h4 class="modal-title">Are You Sure?</h4> </div>
                       </div>
-                      <div v-if="deletingTvSeries" class="row justify-content-md-center">
-                        <div class="col-md-6 justify-content-md-center">
-                          <button type="button" class="close" v-on:click="deleteTvSeries">
+                      <div v-if="deletingTvSeries" class="row">
+                        <div class="col-sm-6 text-center">
+                          <button type="button" class="close" v-on:click="deleteTvSeries(tvSeriesDetails.tmdbID)">
                             <!-- <span aria-hidden="true">&times;</span> -->
                             <span aria-hidden="true">Yes</span> 
                           </button> 
                         </div>
-                        <div class="col-md-6 justify-content-md-center">
+                        <div class="col-sm-6 text-center">
                           <button type="button" class="close" @click="deletingTvSeries=false">
                             <!-- <span aria-hidden="true">&times;</span> -->
                             <span aria-hidden="true">No</span> 
@@ -147,17 +145,19 @@ export default {
       if (response.status === 200){
         let watchListTmdbID = []
         for ( let i in response.data.content.watchList) watchListTmdbID.push(response.data.content.watchList[i])
-        let responseTmdb
-        try{
-            responseTmdb = await userServiceTmdb.fetchTvSeriesTitles(watchListTmdbID)
-        }
-        catch (err){
-          responseTmdb = err.response
-        }
-        finally {
-          if (responseTmdb.status === 200){
-            this.tvSeries = responseTmdb.data.content.tvSeries
-            this.isReady = true
+        if(watchListTmdbID.length > 0){
+          let responseTmdb
+          try{
+              responseTmdb = await userServiceTmdb.fetchTvSeriesTitles(watchListTmdbID)
+          }
+          catch (err){
+            responseTmdb = err.response
+          }
+          finally {
+            if (responseTmdb.status === 200){
+              this.tvSeries = responseTmdb.data.content.tvSeries
+              this.isReady = true
+            }
           }
         }
       }
@@ -166,8 +166,29 @@ export default {
 
   methods: {
 
-    async deleteTvSeries(){
+    async deleteTvSeries(tmdbID){
+      let response 
+      try{
+        let body = {
+          "0" : {
+            op: "remove"
+          }
+        }
+        response = await userServiceTvSeries.patchTvSeries(this.user, tmdbID, body)
+        
+      }
+      catch (err){
+        response = err.response
+      }   
+      finally {
 
+        if (response.status === 200){
+          this.tvSeriesDetails = {}
+          this.tvSeries.splice((this.tvSeries.indexOf(this.tvSeries.find(c => c.tmdbID == tmdbID))), 1)
+          this.showModal = false
+          this.deletingTvSeries = false 
+        } 
+      }  
     },
 
     async changeTvSeriesStatus(tmdbID){
@@ -191,7 +212,7 @@ export default {
             this.tvSeriesDetails = {}
             this.tvSeries.splice((this.tvSeries.indexOf(this.tvSeries.find(c => c.tmdbID == tmdbID))), 1)
             this.showModal = false
-            router.push({ name: 'OnWatch', params: {currentUser: this.user }})
+            //router.push({ name: 'OnWatch', params: {currentUser: this.user }})
           } 
         }  
     },

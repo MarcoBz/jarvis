@@ -1,15 +1,21 @@
 <template>
-    <div id="searchtvseries">
-        <div class="row justify-content-md-center">
-                <div class="col col-lg-2"><input type="text" placeholder="Search Title.."  v-model="title"></div>
-                <div class="col col-lg-2"><button v-on:click="searchTvSeries">Search</button></div>
+    <div id="searchtvseries" class="container">
+        <div class = "row">
+          <div class = "col col-sm-6 text-center">
+            <input type="text" placeholder="Search Title.."  v-model="title">
+          </div>
+          <div class = "col col-sm-6 text-left">
+            <button v-on:click="searchTvSeries">Search</button>
+          </div>
         </div>
-        <div v-show="isSearchEnded" class="row justify-content-md-center"  v-for="result in searchResults">
-                <div class="col col-lg-10" >
+        <div v-show="isSearchEnded" class="row"  v-for="result in searchResults">
+                <div class="col col-10 text-center" >
                   <b><p><u>"{{result.title}}"</u> ({{result.airDate}} - {{result.country}})</p></b>
                   <p>{{result.overview}}</p>
                 </div>
-                <div class="col col-lg-2"><button class="btn" v-bind:disabled= "result.isAdded" v-bind:class= "{'btn-success' : result.isAdded}" v-on:click="addTvSeries(result.tmdbID)">{{result.message}}</button></div>
+                <div class="col col-2 text-left">
+                  <button class="btn" v-bind:disabled= "result.isAdded" v-bind:class= "{'btn-success' : result.isAdded}" v-on:click="addTvSeries(result.tmdbID)">{{result.message}}</button>
+                </div>
         </div>
     </div>
 </template>

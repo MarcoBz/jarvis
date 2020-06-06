@@ -3,6 +3,9 @@ const Validation = require('./validation')
 const home = require('./routes/home')
 const user = require('./routes/user/user')
 const checklist = require('./routes/user/checklist')
+const userTvSeries = require('./routes/user/tvSeries')
+const tmdbData = require('./routes/tmdb')
+const test = require('./routes/test')
 
 const validator = new Validation()
 const app = express()
@@ -21,6 +24,9 @@ app.use(function(req, res, next) {
 app.use('/', home)
 app.use('/api/user', user)
 app.use('/api/checklist', checklist)
+app.use('/api/tvseries', userTvSeries)
+app.use('/api/tmdb', tmdbData)
+app.use('/api/test', test)
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4000 ;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -10,6 +10,7 @@ import TvSeriesPage from '../components/TvSeries/TvSeriesPage'
 import SearchTvSeries from '../components/TvSeries/SearchTvSeries'
 import WatchList from '../components/TvSeries/WatchList'
 import OnWatch from '../components/TvSeries/OnWatch'
+import Memory from '../components/TvSeries/Memory'
 
 Vue.use(Router)
 
@@ -71,7 +72,13 @@ export default new Router({
           name: 'OnWatch',
           props: true,
           component: OnWatch
-        }           
+        },
+        {
+          path: '/TvSeries/Memory',
+          name: 'Memory',
+          props: true,
+          component: Memory
+        }      
       ]
     }
   ]

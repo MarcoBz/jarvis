@@ -1,11 +1,4 @@
-const mongoose = require("./mongoConnection")
-
-userSchema = new mongoose.Schema({
-    user: String,
-    name: String,
-    surname: String, 
-    rooms: [String]
-})
+const mongoose = require("../mongoConnection")
 
 actionSchema = new mongoose.Schema({
     action: String,
@@ -18,6 +11,5 @@ daysSchema = new mongoose.Schema({
     actions: [actionSchema]
 })
 
-module.exports.userSchema = userSchema
 module.exports.actionSchema = actionSchema
 module.exports.daysSchema = daysSchema

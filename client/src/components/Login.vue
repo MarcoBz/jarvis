@@ -1,8 +1,12 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
       <div class = "row">
-        <input  id="userName" v-model="user" class = "col col-2 text-center" placeholder="User Name" v-bind:class="{ 'border border-danger' :userError}" v-on:keydown="deleteBorder()">
-        <button class = "col col-2 bg-light" v-on:click="getUser()"></button>
+        <div class = "col col-sm-6 text-center">
+          <input  id="userName" v-model="user"  placeholder="User Name" v-bind:class="{ 'border border-danger' :userError}" v-on:keydown="deleteBorder()">
+        </div>
+        <div class = "col col-sm-6 text-left">
+         <button class = "btn-light" v-on:click="getUser()">Login</button>
+        </div>
       </div>
   </div>
 </template>

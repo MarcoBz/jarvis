@@ -18,14 +18,14 @@
             <div v-for= "season in title.seasons">
               <div class="row justify-content-md-center">
                 <div class = "col col-md-12">
-                  <button class="btn" v-bind:disabled= "!season.isAired" v-bind:class= "{'btn-success' : season.isCompleted, 'btn-warning' : season.isOnWatch}" @click="showSeasonModal = true; currentTmdbID = title.tmdbID; currentSeason = season.seasonNumber" >Season {{season.seasonNumber}}</button>
+                  <button class="btn" disabled v-bind:class= "{'btn-success' : season.isCompleted, 'btn-warning' : season.isOnWatch}" @click="showSeasonModal = true; currentTmdbID = title.tmdbID; currentSeason = season.seasonNumber" >Season {{season.seasonNumber}}</button>
                 </div>
               </div>
 
               <div class="row justify-content-md-center">
                 <div class = "col col-md-12">
                   <span v-for= "episode in season.episodes">
-                    <button class="btn" v-bind:disabled= "!episode.isAired" v-bind:class= "{'btn-success' : episode.isWatched, 'btn-warning' : episode.isPaused}" v-on:click = "clickEpisode(title.tmdbID, season.seasonNumber, episode.episodeNumber)">{{episode.episodeNumber}}</button>
+                    <button class="btn" disabled v-bind:class= "{'btn-success' : episode.isWatched, 'btn-warning' : episode.isPaused}" v-on:click = "clickEpisode(title.tmdbID, season.seasonNumber, episode.episodeNumber)">{{episode.episodeNumber}}</button>
                   </span> 
                 </div>                
               </div>
@@ -102,7 +102,7 @@
                         <div class="col-md-4">
                           <button type="button" class="close" v-on:click= "changeTvSeriesStatus(tvSeriesDetails.tmdbID)">
                             <!-- <span aria-hidden="true">&times;</span> -->
-                            <span aria-hidden="true">Forget</span> 
+                            <span aria-hidden="true">Remember</span> 
                           </button> 
                         </div>
                         <div class="col-md-4">
@@ -204,24 +204,24 @@ export default {
   async mounted(){
     let response 
     try{
-        response = await userServiceTvSeries.fetchOnWatch(this.user)
+        response = await userServiceTvSeries.fetchMemory(this.user)
     }
     catch (err){
       response = err.response
-      console.log(response)
     }
     finally {
 
       if (response.status === 200){
-        let onWatchTmdbID = []
-        for ( let i in response.data.content.onWatch) onWatchTmdbID.push(response.data.content.onWatch[i])
-        if(onWatchTmdbID.length > 0){
-        let responseTmdb
+        let memoryTmdbID = []
+        for ( let i in response.data.content.onWatch) memoryTmdbID.push(response.data.content.onWatch[i])
+        if(memoryTmdbID.length > 0){
+          let responseTmdb
           try{
-              responseTmdb = await userServiceTmdb.fetchTvSeriesTitles(onWatchTmdbID)
+              responseTmdb = await userServiceTmdb.fetchTvSeriesTitles(memoryTmdbID)
           }
           catch (err){
             responseTmdb = err.response
+            console.log(response)
           }
           finally {
             if (responseTmdb.status === 200){
@@ -244,322 +244,6 @@ export default {
 
   methods: {
 
-
-    async clickSeason(tmdbID, seasonNumber){
-      this.showSeasonModal = false
-      let season = this.tvSeries.find(c => c.tmdbID == tmdbID).seasons.find(d => d.seasonNumber == seasonNumber)
-      let statusValue = null
-      if (season.isCompleted){
-        statusValue = '0'
-      }
-      else{
-        statusValue = '1'
-      }
-      let response 
-      try{
-        let body
-        if (season.isSaved){
-          body = {
-            '0' : {
-              op: 'replace',
-              path: 'season/' + season.seasonNumber + '/statusSeason',
-              value: statusValue
-            }
-          }
-        }
-        else{
-          body = {
-            '0' : {
-              op: 'add',
-              path: 'season/' + season.seasonNumber ,
-              value: statusValue
-            }
-          }         
-        }  
-        response = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, body)   
-      }
-      catch (err){
-        response = err.response
-        console.log(response)
-      } 
-      finally{
-        if (response.status === 200){
-          let startingEpisode = null 
-          let endingEpisode = null
-          let episodeResponse
-          for (let i = 0; i < season.numEpisodes; i++  ){
-            let episode = season.episodes.find( c => c.episodeNumber == i + 1)
-            if (episode.isAired && !startingEpisode && !endingEpisode) startingEpisode = i+1
-            if (!episode.isAired && startingEpisode && !endingEpisode) endingEpisode = i
-            if ( i + 1 == season.numEpisodes && startingEpisode && !endingEpisode) endingEpisode = i+1
-          }
-          try{
-            let episodeBody = {
-              '0' : {
-                op: 'replace',
-                path: 'season/' + season.seasonNumber + '/episode/' + startingEpisode + '/' + endingEpisode,
-                value: statusValue
-              }
-            }
-            episodeResponse = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, episodeBody)
-          }
-          catch (err){
-            episodeResponse = err.response
-            console.log(response)
-          }
-          finally{
-            if (episodeResponse.status === 200){
-
-              for (let i = 0; i < season.numEpisodes; i++  ){
-                let episode = season.episodes.find( c => c.episodeNumber == i + 1)
-                if (episode.isAired){
-                  if (season.isCompleted){
-                    episode.isWatched = false
-                    episode.isPaused = false
-                  }
-                  else{
-                    episode.isWatched = true
-                    episode.isPaused = false
-                  }
-                }
-
-              }
-            }
-          }
-          // for (let i = 0; i < season.numEpisodes; i++  ){
-          //   let episodeResponse
-          //   let episode = season.episodes[i]
-          //   if (episode.isAired){
-          //     try{
-          //       let episodeBody
-          //       if (episode.isSaved){
-          //         episodeBody = {
-          //           '0' : {
-          //             op: 'replace',
-          //             path: 'season/' + season.seasonNumber + '/episode/' + episode.episodeNumber + '/statusEpisode',
-          //             value: statusValue
-          //           }
-          //         }
-          //       }
-          //       else{
-          //         episodeBody = {
-          //           '0' : {
-          //             op: 'add',
-          //             path: 'season/' + season.seasonNumber + '/episode/' + episode.episodeNumber ,
-          //             value: statusValue
-          //           }
-          //         }         
-          //       }  
-          //       episodeResponse = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, episodeBody) 
-          //     }
-          //     catch (err){
-          //       episodeResponse = err.response
-          //     }
-          //     finally{
-          //       if (episodeResponse.status === 200){
-          //         if (season.isCompleted){
-          //           episode.isWatched = false
-          //           episode.isPaused = false
-          //         }
-          //         else{
-          //           episode.isWatched = true
-          //           episode.isPaused = false
-          //         }
-          //       }
-          //     }
-          //   }
-
-          // }
-          if (season.isCompleted){
-            season.isCompleted = false
-            season.isOnWatch = false
-          }
-          else{
-            season.isCompleted = true
-            season.isOnWatch = false
-          }  
-          season.isSaved = true
-        }
-      }
-    },
-    async clickEpisode(tmdbID, seasonNumber, episodeNumber){
-      this.clicks++ 
-        if(this.clicks === 1) {
-          this.timer = setTimeout(() => {
-            this.singleClickEpisode(tmdbID, seasonNumber, episodeNumber)
-            this.clicks = 0
-          }, this.delay);
-        } else{
-            clearTimeout(this.timer);  
-            this.dblClickEpisode(tmdbID, seasonNumber, episodeNumber);
-            this.clicks = 0;
-        }  
-    },
-    async dblClickEpisode(tmdbID, seasonNumber, episodeNumber){
-      let season = this.tvSeries.find(c => c.tmdbID == tmdbID).seasons.find(d => d.seasonNumber == seasonNumber)
-      let episode = season.episodes.find(f => f.episodeNumber == episodeNumber)
-
-      if (!episode.isPaused){
-        let statusValue = '-1'
-        let response 
-        try{
-          let body
-          if (episode.isSaved){
-            body = {
-              '0' : {
-                op: 'replace',
-                path: 'season/' + season.seasonNumber + '/episode/' + episode.episodeNumber + '/statusEpisode',
-                value: statusValue
-              }
-            }
-          }
-          else{
-            body = {
-              '0' : {
-                op: 'add',
-                path: 'season/' + season.seasonNumber + '/episode/' + episode.episodeNumber ,
-                value: statusValue
-              }
-            }         
-          }  
-          response = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, body)   
-        }
-        catch (err){
-          response = err.response
-          console.log(response)
-        } 
-
-        finally{
-          
-          if (response.status === 200){
-            episode.isPaused = true
-            episode.isWatched = false
-          }
-          episode.isSaved = true
-          season.isSaved = true
-
-          let seasonResponse
-
-          try{
-            let body = {
-              '0' : {
-                op: 'replace',
-                path: 'season/' + season.seasonNumber + '/statusSeason',
-                value: '-1'
-              }
-            }
-            seasonResponse  = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, body)
-          }
-          catch (err){
-            seasonResponse  = err.response
-          }   
-          finally {
-
-            if (seasonResponse.status === 200){
-              season.isCompleted = false
-              season.isOnWatch = true
-            } 
-          }  
-        }
-      }
-    },
-    async singleClickEpisode(tmdbID, seasonNumber, episodeNumber){
-      let season = this.tvSeries.find(c => c.tmdbID == tmdbID).seasons.find(d => d.seasonNumber == seasonNumber)
-      let episode = season.episodes.find(f => f.episodeNumber == episodeNumber)
-
-      let statusValue = null
-      if (episode.isWatched){
-        statusValue = '0'
-      }
-      else{
-        statusValue = '1'
-      }
-      let response 
-      try{
-        let body
-        if (episode.isSaved){
-          body = {
-            '0' : {
-              op: 'replace',
-              path: 'season/' + season.seasonNumber + '/episode/' + episode.episodeNumber + '/statusEpisode',
-              value: statusValue
-            }
-          }
-        }
-        else{
-          body = {
-            '0' : {
-              op: 'add',
-              path: 'season/' + season.seasonNumber + '/episode/' + episode.episodeNumber ,
-              value: statusValue
-            }
-          }         
-        }  
-        response = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, body)   
-      }
-      catch (err){
-        response = err.response
-        console.log(response)
-      } 
-
-      finally{  
-        if (response.status === 200){
-          if (episode.isWatched){
-            episode.isWatched = false
-            episode.isPaused = false
-          }
-          else{
-            episode.isWatched = true
-            episode.isPaused = false
-          }
-        }
-        episode.isSaved = true
-        season.isSaved = true
-
-        let seasonIsCompleted = true
-        let seasonIsStarted = false
-        for (let i = 0; i < season.numEpisodes; i++){
-          let checkEpisode = season.episodes.find( c => c.episodeNumber == i + 1)
-          if (checkEpisode.isWatched || checkEpisode.isPaused) seasonIsStarted = true
-          if (!checkEpisode.isWatched) seasonIsCompleted = false 
-        }
-        let seasonResponse 
-        try{
-          if (seasonIsStarted && !seasonIsCompleted) statusValue = '-1'
-          else if (seasonIsCompleted) statusValue = '1'
-          else statusValue = '0'
-          let body = {
-            '0' : {
-              op: 'replace',
-              path: 'season/' + season.seasonNumber + '/statusSeason',
-              value: statusValue
-            }
-          }
-          seasonResponse  = await userServiceTvSeries.patchTvSeries(this.currentUser, tmdbID, body)
-        }
-        catch (err){
-          seasonResponse  = err.response
-        }   
-        finally {
-
-          if (seasonResponse.status === 200){
-            if (statusValue == '-1') {
-              season.isCompleted = false
-              season.isOnWatch = true
-            }
-            else if (statusValue == '0') {
-              season.isCompleted = false
-              season.isOnWatch = false
-            }
-            else if (statusValue == '1') {
-              season.isCompleted = true
-              season.isOnWatch = false
-            }
-          } 
-        }  
-      }
-
-    },
     async deleteTvSeries(tmdbID){
       let response 
       try{
@@ -710,6 +394,7 @@ export default {
         this.tvSeries.find(c => c.tmdbID == tmdbID).isClicked = false
       }
     },
+
     async getTvSeriesDetails(tmdbID){
       let response 
         try{

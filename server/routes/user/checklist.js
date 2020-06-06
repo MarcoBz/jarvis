@@ -1,13 +1,14 @@
 const express = require("express")
 const router = express.Router()
 const database = require("../../database")
-const schemas = require("../../utils/schemas")
+const checklistSchemas = require("../../utils/Checklist/schemas")
+const userSchemas = require("../../utils/User/schemas")
 const utils = require("../../utils/mongoUtils")
 const mongoose = require("../../utils/mongoConnection")
 
-userSchema = schemas.userSchema
-actionSchema = schemas.actionSchema
-daysSchema = schemas.daysSchema
+userSchema = userSchemas.userSchema
+actionSchema = checklistSchemas.actionSchema
+daysSchema = checklistSchemas.daysSchema
 const Action = mongoose.model("Action", actionSchema)
 
 router.get("/:user/days/:day", (req, res) => {
